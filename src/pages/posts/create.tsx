@@ -7,31 +7,31 @@ import {
   useSelect,
 } from "@pankod/refine-antd";
 
-import { IPost } from "interfaces";
+import { IMoney } from "interfaces";
 
 export const PostCreate = () => {
-  const { formProps, saveButtonProps } = useForm<IPost>();
-  const { selectProps: categorySelectProps } = useSelect<IPost>({
+  const { formProps, saveButtonProps } = useForm<IMoney>();
+  const { selectProps: categorySelectProps } = useSelect<IMoney>({
     resource: "categories",
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create title='Создать' saveButtonProps={{ ...saveButtonProps, children: 'Создать' }}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label="Title"
-          name="title"
+          label="Сумма"
+          name="count"
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Input />
+          <Input type="number" />
         </Form.Item>
         <Form.Item
-          label="Status"
-          name="status"
+          label="Вид"
+          name="isIncome"
           rules={[
             {
               required: true,
@@ -41,23 +41,19 @@ export const PostCreate = () => {
           <Select
             options={[
               {
-                label: "Published",
-                value: "published",
+                label: "Доход",
+                value: true,
               },
               {
-                label: "Draft",
-                value: "draft",
-              },
-              {
-                label: "Rejected",
-                value: "rejected",
+                label: "Расход",
+                value: false,
               },
             ]}
           />
         </Form.Item>
         <Form.Item
-          label="Category"
-          name={["category", "id"]}
+          label="Категория"
+          name={["categoryId"]}
           rules={[
             {
               required: true,

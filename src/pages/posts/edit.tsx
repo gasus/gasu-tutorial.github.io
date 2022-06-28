@@ -1,20 +1,20 @@
 import { useForm, Form, Input, Select, Edit, useSelect } from "@pankod/refine-antd";
-import { IPost } from "interfaces";
+import { IMoney } from "interfaces";
 
 export const PostEdit: React.FC = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm<IPost>();
+  const { formProps, saveButtonProps, queryResult } = useForm<IMoney>();
 
-  const { selectProps: categorySelectProps } = useSelect<IPost>({
+  const { selectProps: categorySelectProps } = useSelect<IMoney>({
     resource: "categories",
-    defaultValue: queryResult?.data?.data?.category.id,
+    defaultValue: queryResult?.data?.data?.categoryId,
   });
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit title='Редактирование' saveButtonProps={{ ...saveButtonProps, children: 'Создать' }} deleteButtonProps={{ children: 'Удалить' }}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label="Title"
-          name="title"
+          label="Сумма"
+          name="count"
           rules={[
             {
               required: true,
@@ -24,8 +24,8 @@ export const PostEdit: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="Status"
-          name="status"
+          label="Вид"
+          name="isIncome"
           rules={[
             {
               required: true,
@@ -35,23 +35,19 @@ export const PostEdit: React.FC = () => {
           <Select
             options={[
               {
-                label: "Published",
-                value: "published",
+                label: "Доход",
+                value: true,
               },
               {
-                label: "Draft",
-                value: "draft",
-              },
-              {
-                label: "Rejected",
-                value: "rejected",
+                label: "Расход",
+                value: false,
               },
             ]}
           />
         </Form.Item>
         <Form.Item
-          label="Category"
-          name={["category", "id"]}
+          label="Категория"
+          name={["categoryId"]}
           rules={[
             {
               required: true,

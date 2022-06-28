@@ -1,4 +1,4 @@
-import { useMany } from "@pankod/refine-core";
+import { useList } from "@pankod/refine-core";
 import {
   List,
   TextField,
@@ -13,51 +13,60 @@ import {
   Space,
   EditButton,
   DeleteButton,
+  Breadcrumb,
 } from "@pankod/refine-antd";
 
-import { IPost, ICategory } from "../../interfaces";
+import { IMoney, ICategory } from "../../interfaces";
 
 export const PostList: React.FC = () => {
-  const { tableProps } = useTable<IPost>();
+  const { tableProps } = useTable<IMoney>();
 
-  const categoryIds =
-    tableProps?.dataSource?.map((item) => item.category.id) ?? [];
-  const { data: categoriesData, isLoading } = useMany<ICategory>({
-    resource: "categories",
-    ids: categoryIds,
-    queryOptions: {
-      enabled: categoryIds.length > 0,
-    },
-  });
+  const { data: categoriesData, isLoading } = useList<ICategory>({ resource: "categories" });
 
   const { selectProps: categorySelectProps } = useSelect<ICategory>({
     resource: "categories",
   });
 
   return (
-    <List>
+    <List
+      createButtonProps={{ children: 'Добавить' }}
+    // pageHeaderProps={{
+    //   breadcrumb: <Breadcrumb breadcrumbProps={{
+    //     separator: "-", routes: [{
+    //       path: 'money',
+    //       breadcrumbName: '111111',
+    //       children: [
+    //         {
+    //           path: '/create',
+    //           breadcrumbName: 'General',
+    //         },
+    //       ],
+    //     }]
+    //   }} />,
+    // }}
+    >
       <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="title" title="title" />
+        <Table.Column dataIndex="count" title="Сумма" />
         <Table.Column
-          dataIndex="status"
-          title="status"
-          render={(value) => <TagField value={value} />}
+          dataIndex="isIncome"
+          title="Вид"
+          render={(value) => <TagField value={value ? 'Доход' : 'Расход'} color={value ? 'green' : 'red'} />}
         />
         <Table.Column
           dataIndex="createdAt"
-          title="createdAt"
-          render={(value) => <DateField format="LLL" value={value} />}
+          title="Дата"
+          render={(value) => <DateField format="DD/MM/YYYY" value={value} />}
         />
         <Table.Column
-          dataIndex={["category", "id"]}
-          title="category"
+          dataIndex="categoryId"
+          title="Категория"
           render={(value) => {
             if (isLoading) {
-              return <TextField value="Loading..." />;
+              return <TextField value="Загрузка..." />;
             }
 
             return (
-              <TextField
+              <TagField
                 value={
                   categoriesData?.data.find(
                     (item) => item.id === value,
@@ -67,18 +76,18 @@ export const PostList: React.FC = () => {
             );
           }}
           filterDropdown={(props) => (
-            <FilterDropdown {...props}>
+            <FilterDropdown {...props} >
               <Select
                 style={{ minWidth: 200 }}
                 mode="multiple"
-                placeholder="Select Category"
+                placeholder="Выберите категорию"
                 {...categorySelectProps}
               />
             </FilterDropdown>
           )}
         />
-        <Table.Column<IPost>
-          title="Actions"
+        <Table.Column<IMoney>
+          title="Действия"
           dataIndex="actions"
           render={(_text, record): React.ReactNode => {
             return (

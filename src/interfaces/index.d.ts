@@ -3,10 +3,10 @@ export interface ICategory {
     title: string;
 }
 
-export interface IPost {
+export interface IMoney {
     id: string;
-    title: string;
-    status: "published" | "draft" | "rejected";
-    category: { id: string };
+    count: number;
+    isIncome: boolean;
+    categoryId: number;
     createdAt: string;
 }

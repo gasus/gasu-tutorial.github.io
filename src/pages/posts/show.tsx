@@ -1,7 +1,7 @@
 import { useShow, useOne } from "@pankod/refine-core";
 import { Show, Typography, Tag } from "@pankod/refine-antd";
 
-import { IPost, ICategory } from "interfaces";
+import { ICategory } from "interfaces";
 
 const { Title, Text } = Typography;
 
@@ -12,24 +12,24 @@ export const PostShow = () => {
 
     const { data: categoryData } = useOne<ICategory>({
         resource: "categories",
-        id: record?.category.id || "",
+        id: record?.categoryId || "",
         queryOptions: {
-            enabled: !!record?.category.id,
+            enabled: !!record?.categoryId,
         },
     });
 
     return (
-        <Show isLoading={isLoading}>
-            <Title level={5}>Title</Title>
-            <Text>{record?.title}</Text>
+        <Show title='Просмотр записи' isLoading={isLoading}>
+            <Title level={5}>Сумма</Title>
+            <Text>{record?.count}</Text>
 
-            <Title level={5}>Status</Title>
+            <Title level={5}>Вид</Title>
             <Text>
-                <Tag>{record?.status}</Tag>
+                <Tag>{record?.isIncome}</Tag>
             </Text>
 
-            <Title level={5}>Category</Title>
-            <Text>{categoryData?.data.title}</Text>
+            <Title level={5}>Категория</Title>
+            <Tag>{categoryData?.data.title}</Tag>
         </Show>
     );
 };
