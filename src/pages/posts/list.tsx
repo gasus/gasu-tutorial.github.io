@@ -8,10 +8,14 @@ import {
   useTable,
   FilterDropdown,
   Select,
+  ShowButton,
   useSelect,
+  Space,
+  EditButton,
+  DeleteButton,
 } from "@pankod/refine-antd";
 
-import { IPost, ICategory } from "interfaces";
+import { IPost, ICategory } from "../../interfaces";
 
 export const PostList: React.FC = () => {
   const { tableProps } = useTable<IPost>();
@@ -25,6 +29,7 @@ export const PostList: React.FC = () => {
       enabled: categoryIds.length > 0,
     },
   });
+
   const { selectProps: categorySelectProps } = useSelect<ICategory>({
     resource: "categories",
   });
@@ -71,6 +76,31 @@ export const PostList: React.FC = () => {
               />
             </FilterDropdown>
           )}
+        />
+        <Table.Column<IPost>
+          title="Actions"
+          dataIndex="actions"
+          render={(_text, record): React.ReactNode => {
+            return (
+              <Space>
+                <ShowButton
+                  size="small"
+                  recordItemId={record.id}
+                  hideText
+                />
+                <EditButton
+                  size="small"
+                  recordItemId={record.id}
+                  hideText
+                />
+                <DeleteButton
+                  size="small"
+                  recordItemId={record.id}
+                  hideText
+                />
+              </Space>
+            );
+          }}
         />
       </Table>
     </List>
